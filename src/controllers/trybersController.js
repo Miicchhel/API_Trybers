@@ -5,19 +5,20 @@ const getAllTrybers = async (_req, res) => {
   return res.status(200).json(trybers);
 }
 
-const getTrybersById = async (req, res) => {
+const getTrybersByEmail = async (req, res) => {
   try {
-    const { id } = req.params;
-    const tryber = await trybersService.getTrybersById(id);
+    const { email } = req.params;
+    const tryber = await trybersService.getTrybersByEmail(email);
     return res.status(200).json(tryber);
   } catch (error) {
-    res.status(400).send({ message: `${error.message} - o id:${id } não consta no banco de dados`});
+    res.status(400).send({ message: `${error.message} - o email:${ email } não consta no banco de dados`});
   }
 }
 
 const insertTryber = async (req, res) => {
   try {
     const newTryber = await trybersService.insertTryber(req.body)
+    if (!newTryber) return res.status(409).json('Email já existe');
     res.status(201).json(newTryber);
   } catch (error) {
     res.status(500).send({ message: `${error.message} - falha ao cadastrar o Tryber`});
@@ -47,7 +48,8 @@ const removeTryber = async (req, res) => {
 export default {
   getAllTrybers,
   insertTryber,
-  getTrybersById,
+  // getTrybersById,
   updateTryber,
-  removeTryber
+  removeTryber,
+  getTrybersByEmail,
 }

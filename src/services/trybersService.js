@@ -5,12 +5,14 @@ const getAllTrybers = async () => {
   return response;
 }
 
-const getTrybersById = async (id) => {
-  const response = await trybers.findById(id)
-  return response;
+const getTrybersByEmail = async (email) => {
+  const response = await trybers.find();
+  const responseFrintered = response.filter((item) => item.email === email)
+  return responseFrintered;
 }
 
 const insertTryber = async (body) => {
+  if ((await getTrybersByEmail(body.email)).length === 1) return null 
   const tryber = new trybers(body)
   return tryber.save();
 }
@@ -26,7 +28,7 @@ const removeTryber = async (id) => {
 export default {
   getAllTrybers,
   insertTryber,
-  getTrybersById,
   updateTryber,
   removeTryber,
+  getTrybersByEmail,
 }

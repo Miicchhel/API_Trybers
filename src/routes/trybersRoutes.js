@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
   .get("/trybers", trybersController.getAllTrybers)
-  .get("/trybers/:id", trybersController.getTrybersById)
+  .get("/trybers/:email", trybersController.getTrybersByEmail)
   .post("/trybers", trybersController.insertTryber)
   .put("/trybers/:id", trybersController.updateTryber)
   .delete("/trybers/:id", trybersController.removeTryber)
