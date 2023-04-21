@@ -5,6 +5,10 @@ const router = express.Router();
 
 router
   .get("/trybers", trybersController.getAllTrybers)
+  .get("/trybers/:id", trybersController.getTrybersById)
+  .post("/trybers", trybersController.insertTryber)
+  .put("/trybers/:id", trybersController.updateTryber)
+  .delete("/trybers/:id", trybersController.removeTryber)
 
 
 export default router;
