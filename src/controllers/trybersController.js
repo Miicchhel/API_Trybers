@@ -16,32 +16,44 @@ const getTrybersByEmail = async (req, res) => {
 }
 
 const insertTryber = async (req, res) => {
-  try {
-    const newTryber = await trybersService.insertTryber(req.body)
-    if (!newTryber) return res.status(409).json('Email já existe');
-    res.status(201).json(newTryber);
-  } catch (error) {
-    res.status(500).send({ message: `${error.message} - falha ao cadastrar o Tryber`});
-  }
+    try {
+      const newTryber = await trybersService.insertTryber(req.body)
+      if (!newTryber) return res.status(409).json('Email já existe');
+      res.status(201).json(newTryber);
+    } catch (error) {
+      res.status(500).send({ message: `${error.message} - falha ao cadastrar o Tryber`});
+    }
 }
 
 const updateTryber = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await trybersService.updateTryber(id, req.body);
-    res.status(200).send({ message: 'Tryber atualizado com sucesso' });
-  } catch (error) {
-    res.status(500).send({ message: `${error.message} - falha ao atualizar o Tryber`});
+  const { authorization } = req.headers;
+
+  if (process.env.ADMIN_ACESS === authorization) {
+    try {
+      const { id } = req.params;
+      await trybersService.updateTryber(id, req.body);
+      res.status(200).send({ message: 'Tryber atualizado com sucesso' });
+    } catch (error) {
+      res.status(500).send({ message: `${error.message} - falha ao atualizar o Tryber`});
+    }
+  } else {
+    return res.status(500).json({message: 'você não pode mais fazer isso!'});
   }
 }
 
 const removeTryber = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await trybersService.removeTryber(id)
-    res.status(200).send({ message: 'Tryber deletado com sucesso' });
-  } catch (error) {
-    res.status(500).send({ message: `${error.message} - falha ao deletar o Tryber`});
+  const { authorization } = req.headers;
+
+  if (process.env.ADMIN_ACESS === authorization) {
+    try {
+      const { id } = req.params;
+      await trybersService.removeTryber(id)
+      res.status(200).send({ message: 'Tryber deletado com sucesso' });
+    } catch (error) {
+      res.status(500).send({ message: `${error.message} - falha ao deletar o Tryber`});
+    }
+  } else {
+    return res.status(500).json({message: 'você não pode mais fazer isso!'});
   }
 }
 
