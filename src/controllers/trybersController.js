@@ -16,9 +16,6 @@ const getTrybersByEmail = async (req, res) => {
 }
 
 const insertTryber = async (req, res) => {
-  const { authorization } = req.headers;
-
-  if (process.env.ADMIN_CHAVE === process.env.ADMIN_ACESS + authorization) {
     try {
       const newTryber = await trybersService.insertTryber(req.body)
       if (!newTryber) return res.status(409).json('Email já existe');
@@ -26,15 +23,12 @@ const insertTryber = async (req, res) => {
     } catch (error) {
       res.status(500).send({ message: `${error.message} - falha ao cadastrar o Tryber`});
     }
-  } else {
-    return res.status(500).json({message: 'você não pode mais fazer isso!'});
-  }
 }
 
 const updateTryber = async (req, res) => {
   const { authorization } = req.headers;
 
-  if (process.env.ADMIN_CHAVE === process.env.ADMIN_ACESS + authorization) {
+  if (process.env.ADMIN_ACESS === authorization) {
     try {
       const { id } = req.params;
       await trybersService.updateTryber(id, req.body);
@@ -50,7 +44,7 @@ const updateTryber = async (req, res) => {
 const removeTryber = async (req, res) => {
   const { authorization } = req.headers;
 
-  if (process.env.ADMIN_CHAVE === process.env.ADMIN_ACESS + authorization) {
+  if (process.env.ADMIN_ACESS === authorization) {
     try {
       const { id } = req.params;
       await trybersService.removeTryber(id)
