@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const tryberSchema = new mongoose.Schema({
-  id: { type: String },
   turma: { type: Number, require: true },
   nome: { type: String, require: true },
   email: { type: String, require: true },
